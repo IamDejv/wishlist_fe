@@ -1,0 +1,213 @@
+<template>
+	<v-container fluid tag="section">
+		<v-row justify="center">
+			<v-col cols="12" md="4">
+				<v-card>
+					<v-form ref="form">
+						<v-container class="py-0">
+							<v-row>
+								<v-col>
+									<div class="sign-up-header text-center">Sign up</div>
+								</v-col>
+							</v-row>
+
+							<v-divider class="my-5" />
+
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model.trim="form.email"
+										required
+										label="Email"
+										:rules="[
+											(v) => !!v || 'Email must be filled',
+											(v) =>
+												!v ||
+												/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+													v
+												) ||
+												'Email must be valid',
+										]"
+									/>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="form.password"
+										required
+										:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+										:type="showPassword ? 'text' : 'password'"
+										label="Password"
+										:rules="[(v) => !!v || 'Password must be filled']"
+										@click:append="showPassword = !showPassword"
+									/>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="form.passwordAgain"
+										required
+										label="Password again"
+										:rules="[passwordFilled, passwordMatched]"
+										:append-icon="showPasswordAgain ? 'mdi-eye' : 'mdi-eye-off'"
+										:type="showPasswordAgain ? 'text' : 'password'"
+										@click:append="showPasswordAgain = !showPasswordAgain"
+									/>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model.trim="form.firstname"
+										required
+										label="Firstname"
+										:rules="[(v) => !!v || 'Name must be filled']"
+									/>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model.trim="form.lastname"
+										required
+										label="Lastname"
+										:rules="[(v) => !!v || 'Lastname must be filled']"
+									/>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-btn
+										min-width="150"
+										color="info"
+										class="white--text float-right"
+										@click="signUp"
+									>
+										SignUp
+									</v-btn>
+								</v-col>
+							</v-row>
+						</v-container>
+					</v-form>
+				</v-card>
+			</v-col>
+		</v-row>
+	</v-container>
+</template>
+
+<script>
+import { auth, prepareErrorMessage } from "@/firebase/firebase";
+import "firebase/auth";
+import { sync } from "vuex-pathify";
+
+export default {
+	name: "SignUp",
+
+	data: () => ({
+		form: {
+			firstname: "",
+			lastname: "",
+			email: "",
+			password: "",
+			passwordAgain: "",
+		},
+		showPassword: false,
+		showPasswordAgain: false,
+	}),
+
+	computed: {
+		snackbar: sync("app/snackbar"),
+	},
+
+	methods: {
+		async signUp() {
+			if (this.validate()) {
+				const { firstname, lastname, email, password, passwordAgain } = this.form;
+				let successfulRegistration = false;
+
+				if (password !== passwordAgain) return;
+
+				await auth
+					.createUserWithEmailAndPassword(email, password)
+					.then(() => {
+						successfulRegistration = true;
+					})
+					.catch((e) => {
+						this.snackbar = {
+							open: true,
+							message: prepareErrorMessage(e),
+							type: "error",
+						};
+					});
+
+				if (successfulRegistration) {
+					const body = {
+						firstname,
+						lastname: this.prepareLastname(lastname),
+						email,
+					};
+					console.log(body);
+					// await LoginService.signUp(body)
+					// 	.then(() => {
+					// 		this.snackbar = {
+					// 			open: true,
+					// 			message: "Byl jste zaregistrován, můžete přejít k přihlášení",
+					// 			type: "success",
+					// 		};
+					// 		auth.signOut();
+					// 		this.$router.push({ name: "Login" });
+					// 	})
+					// 	.catch((e) => {
+					// 		this.snackbar = {
+					// 			open: true,
+					// 			message: e.message,
+					// 			type: "error",
+					// 		};
+					// 	});
+				}
+			}
+		},
+
+		prepareLastname(lastname) {
+			if (Array.isArray(lastname)) {
+				let preparedLastname = "";
+				lastname.forEach((item) => {
+					if (preparedLastname === "") {
+						preparedLastname = item;
+					} else {
+						preparedLastname += ` ${item}`;
+					}
+				});
+				return preparedLastname;
+			}
+			return lastname;
+		},
+
+		validate() {
+			return this.$refs.form.validate();
+		},
+
+		passwordFilled(v) {
+			return !!v || "Password must be filled";
+		},
+
+		passwordMatched(v) {
+			return v === this.form.password || "Passwords does not match";
+		},
+	},
+};
+</script>
+
+<style scoped>
+section {
+	margin-top: 10%;
+}
+
+.sign-up-header {
+	font-family: "Roboto";
+	font-size: xx-large;
+	color: dimgrey;
+}
+</style>
