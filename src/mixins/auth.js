@@ -11,12 +11,6 @@ export default {
 			return this.getLoggedUser().uid;
 		},
 
-		async getLoggedUserRole() {
-			return this.getTokenResult().then((user) => {
-				return user.claims.role;
-			});
-		},
-
 		async signOut() {
 			return firebase.auth().signOut();
 		},

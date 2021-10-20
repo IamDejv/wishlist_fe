@@ -6,14 +6,23 @@ import auth from "@/mixins/auth";
 Vue.use(VueRouter);
 
 const routes = [
-	// layout("Default", [
-	// 	route("UserProfile", null, "profile", {
-	// 		requiresAuth: true,
-	// 	}),
-	// 	route("Dashboard", null, "", {
-	// 		requiresAuth: true,
-	// 	}),
-	// ]),
+	layout("Default", [
+		route("Dashboard", null, "", {
+			requiresAuth: true,
+		}),
+		route("Friends", null, "friends", {
+			requiresAuth: true,
+		}),
+		route("Groups", null, "groups", {
+			requiresAuth: true,
+		}),
+		route("Wishlists", null, "wishlists", {
+			requiresAuth: true,
+		}),
+		route("Products", null, "products", {
+			requiresAuth: true,
+		}),
+	]),
 	layout("Login", [
 		route("Login", "Login", "login"),
 		route("SignUp", null, "sign-up"),
