@@ -11,13 +11,11 @@ const store = new Vuex.Store({
 	plugins: [pathify.plugin],
 });
 
-store.subscribe((mutation) => {
-	if (!mutation.type.startsWith("user/")) return;
-
-	store.dispatch("user/update", mutation);
-});
-
-store.dispatch("app/init");
+// store.subscribe((mutation) => {
+// 	if (!mutation.type.startsWith("user/")) return;
+//
+// 	store.dispatch("user/update", mutation);
+// });
 
 export default store;
 

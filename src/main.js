@@ -5,14 +5,20 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "./plugins";
+import { auth } from "@/firebase/firebase";
 
 Vue.config.productionTip = false;
 
 sync(store, router);
 
-new Vue({
-	router,
-	store,
-	vuetify,
-	render: (h) => h(App),
-}).$mount("#app");
+let app;
+auth.onAuthStateChanged(() => {
+	if (!app) {
+		app = new Vue({
+			router,
+			vuetify,
+			store,
+			render: (h) => h(App),
+		}).$mount("#app");
+	}
+});

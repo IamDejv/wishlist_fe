@@ -48,9 +48,6 @@ const mutations = {
 
 const actions = {
 	...make.actions(state),
-	init: async ({ dispatch }) => {
-		console.log(dispatch);
-	},
 };
 
 const getters = make.getters(state);

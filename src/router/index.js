@@ -5,36 +5,53 @@ import auth from "@/mixins/auth";
 
 Vue.use(VueRouter);
 
+const requireAuth = async (to, form, next) => {
+	if (auth.methods.getLoggedUser()) {
+		next();
+	} else {
+		next("sign-out");
+	}
+};
+
+const isAuth = async (to, from, next) => {
+	if (!auth.methods.getLoggedUser()) {
+		next();
+	} else {
+		next("");
+	}
+};
+
 const routes = [
-	layout("Default", [
-		route("Dashboard", null, "", {
-			requiresAuth: true,
-		}),
-		route("Friends", null, "friends", {
-			requiresAuth: true,
-		}),
-		route("Groups", null, "groups", {
-			requiresAuth: true,
-		}),
-		route("Wishlists", null, "wishlists", {
-			requiresAuth: true,
-		}),
-		route("Products", null, "products", {
-			requiresAuth: true,
-		}),
-	]),
-	layout("Login", [
-		route("Login", "Login", "login"),
-		route("SignUp", null, "sign-up"),
-		route("ForgotPassword", null, "forgot-password"),
-		route("SignOut", null, "sign-out", null, (to, from, next) => {
-			auth.methods.signOut().then(() => {
-				localStorage.removeItem("role");
-				next("/login");
-			});
-		}),
-		route("Error", null, "/*"),
-	]),
+	layout(
+		"Default",
+		[
+			route("Dashboard", null, ""),
+			route("Friends", null, "friends"),
+			route("Groups", null, "groups"),
+			route("Wishlists", null, "wishlists"),
+			route("Products", null, "products"),
+		],
+		"",
+		{},
+		requireAuth
+	),
+	layout(
+		"Login",
+		[
+			route("Login", "Login", "login"),
+			route("SignUp", null, "sign-up"),
+			route("ForgotPassword", null, "forgot-password"),
+			route("SignOut", null, "sign-out", null, (to, from, next) => {
+				auth.methods.signOut().then(() => {
+					next("/login");
+				});
+			}),
+			route("Error", null, "/*"),
+		],
+		"",
+		{},
+		isAuth
+	),
 ];
 
 const router = new VueRouter({

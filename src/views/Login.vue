@@ -1,111 +1,103 @@
 <template>
 	<v-container fluid tag="section">
 		<v-row justify="center">
-			<v-col cols="12" md="4">
+			<v-col cols="12" md="5" lg="4" sm="8" xl="3">
 				<v-card>
-					<v-form ref="form">
-						<v-container class="py-0">
-							<v-row>
-								<v-col>
-									<div class="sign-in-header text-center">Sign in</div>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col class="text-center">
-									<v-btn
-										x-large
-										outlined
-										color="#3b5998"
-										icon
-										elevation="2"
-										fab
-										class="mr-10"
-										@click="onFacebookLogin"
-									>
-										<v-icon>mdi-facebook</v-icon>
-									</v-btn>
-									<v-btn
-										x-large
-										outlined
-										color="#4C8BF5"
-										icon
-										elevation="2"
-										fab
-										class="ml-10"
-										@click="onGoogleLogin"
-									>
-										<v-icon>mdi-google</v-icon>
-									</v-btn>
-								</v-col>
-							</v-row>
+					<v-form ref="form" class="form">
+						<v-row>
+							<v-col>
+								<div class="sign-in-header text-center">Sign in</div>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col class="text-center">
+								<v-btn
+									x-large
+									outlined
+									color="#3b5998"
+									icon
+									elevation="2"
+									fab
+									class="mr-10"
+									@click="onFacebookLogin"
+								>
+									<v-icon>mdi-facebook</v-icon>
+								</v-btn>
+								<v-btn
+									x-large
+									outlined
+									color="#4C8BF5"
+									icon
+									elevation="2"
+									fab
+									class="ml-10"
+									@click="onGoogleLogin"
+								>
+									<v-icon>mdi-google</v-icon>
+								</v-btn>
+							</v-col>
+						</v-row>
 
-							<v-divider class="my-5" />
+						<v-divider class="my-5" />
 
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model="credentials.login"
-										label="Email"
-										:rules="[(v) => !!v || 'Email must be filled']"
-										@keypress.enter="onLogin"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model="credentials.password"
-										:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-										:type="showPassword ? 'text' : 'password'"
-										label="Password"
-										:rules="[(v) => !!v || 'Password must be filled']"
-										@keypress.enter="onLogin"
-										@click:append="showPassword = !showPassword"
-									/>
-								</v-col>
-							</v-row>
-							<v-spacer />
-							<v-row>
-								<v-col>
-									<v-btn
-										x-large
-										block
-										color="info"
-										class="white--text"
-										@click="onLogin"
-									>
-										Login
-									</v-btn>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col class="text-center">
-									<router-link
-										:to="{ name: 'ForgotPassword' }"
-										class="forgot-password"
-									>
-										Forgot Password?
-									</router-link>
-								</v-col>
-							</v-row>
-							<v-divider class="my-5" />
-							<v-row>
-								<v-col class="mx-10">
-									<router-link
-										:to="{ name: 'SignUp' }"
-										class="
-											v-btn
-											white--text
-											v-size--x-large
-											v-btn--block
-											success
-										"
-									>
-										Create New Account
-									</router-link>
-								</v-col>
-							</v-row>
-						</v-container>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model="credentials.login"
+									label="Email"
+									:rules="[(v) => !!v || 'Email must be filled']"
+									@keypress.enter="onLogin"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model="credentials.password"
+									:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+									:type="showPassword ? 'text' : 'password'"
+									label="Password"
+									:rules="[(v) => !!v || 'Password must be filled']"
+									@keypress.enter="onLogin"
+									@click:append="showPassword = !showPassword"
+								/>
+							</v-col>
+						</v-row>
+						<v-spacer />
+						<v-row>
+							<v-col>
+								<v-btn
+									x-large
+									block
+									color="info"
+									class="white--text"
+									@click="onLogin"
+								>
+									Login
+								</v-btn>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col class="text-center">
+								<router-link
+									:to="{ name: 'ForgotPassword' }"
+									class="forgot-password"
+								>
+									Forgot Password?
+								</router-link>
+							</v-col>
+						</v-row>
+						<v-divider class="my-5" />
+						<v-row>
+							<v-col class="mx-10">
+								<router-link
+									:to="{ name: 'SignUp' }"
+									class="v-btn white--text v-size--x-large v-btn--block success"
+								>
+									Create New Account
+								</router-link>
+							</v-col>
+						</v-row>
 					</v-form>
 				</v-card>
 			</v-col>
@@ -114,13 +106,17 @@
 </template>
 
 <script>
-import { auth, prepareErrorMessage } from "@/firebase/firebase";
+import {auth, prepareErrorMessage} from "@/firebase/firebase";
+import authMixin from "@/mixins/auth";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { sync } from "vuex-pathify";
+import {sync} from "vuex-pathify";
+import axios from "axios";
 
 export default {
 	name: "Login",
+
+	mixins: [authMixin],
 
 	data: () => ({
 		credentials: {
@@ -134,6 +130,7 @@ export default {
 
 	computed: {
 		snackbar: sync("app/snackbar"),
+		...sync("user", ["firstname", "lastname", "image"]),
 	},
 
 	methods: {
@@ -163,12 +160,44 @@ export default {
 			provider.addScope("profile");
 			provider.addScope("email");
 			auth.signInWithPopup(provider)
-				.then((response) => {
-					if (response.additionalUserInfo.isNewUser) {
-						this.$router.push({ name: "SignUp" });
+				.then(async ({ additionalUserInfo }) => {
+					axios.defaults.headers["Authentication"] =
+						await this.getLoggedUser().getIdToken();
+
+					this.firstname = additionalUserInfo.profile.given_name;
+					this.lastname = additionalUserInfo.profile.family_name;
+					this.image = additionalUserInfo.profile.picture;
+					if (additionalUserInfo.isNewUser) {
+						const body = {
+							firstname: additionalUserInfo.profile.given_name,
+							lastname: additionalUserInfo.profile.family_name,
+							email: additionalUserInfo.profile.email,
+						};
+						this.signUp(body);
 					} else {
-						this.storeUser(response);
-						this.$router.push({ name: "Dashboard" });
+						axios
+							.get("me")
+							.then(() => {
+								this.$router.push({ name: "Dashboard" });
+							})
+							.catch((e) => {
+								if (e.response) {
+									if (e.response.status === 404) {
+										const body = {
+											firstname: additionalUserInfo.profile.given_name,
+											lastname: additionalUserInfo.profile.family_name,
+											email: additionalUserInfo.profile.email,
+										};
+										this.signUp(body);
+									} else {
+										this.snackbar = {
+											open: true,
+											message: e.response?.message || "Something went wrong",
+											type: "error",
+										};
+									}
+								}
+							});
 					}
 				})
 				.catch((e) => {
@@ -201,6 +230,23 @@ export default {
 				});
 		},
 
+		signUp(body) {
+			const url = "public/sign-up";
+
+			axios
+				.post(url, body)
+				.then(() => {
+					this.$router.push({ name: "Dashboard" });
+				})
+				.catch((e) => {
+					this.snackbar = {
+						open: true,
+						message: e.response?.message || "Something went wrong",
+						type: "error",
+					};
+				});
+		},
+
 		async storeUser() {
 			localStorage.setItem("staySigned", JSON.stringify(this.staySigned));
 		},
@@ -225,5 +271,13 @@ section {
 	font-family: "Roboto";
 	font-size: xx-large;
 	color: dimgrey;
+}
+
+.form {
+	padding: 30px;
+}
+
+.block {
+	max-width: 50%;
 }
 </style>

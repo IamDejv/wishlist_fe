@@ -1,95 +1,98 @@
 <template>
 	<v-container fluid tag="section">
 		<v-row justify="center">
-			<v-col cols="12" md="4">
+			<v-col cols="12" md="3">
 				<v-card>
-					<v-form ref="form">
-						<v-container class="py-0">
-							<v-row>
-								<v-col>
-									<div class="sign-up-header text-center">Sign up</div>
-								</v-col>
-							</v-row>
+					<v-form ref="form" class="form">
+						<v-row>
+							<v-col md="5">
+								<v-btn class="text-right" color="grey darken-3" :to="{ name: 'Login' }" exact>
+									<v-icon>mdi-arrow-left-bold</v-icon>
+								</v-btn>
+							</v-col>
+							<v-col>
+								<div class="sign-up-header">Sign up</div>
+							</v-col>
+						</v-row>
 
-							<v-divider class="my-5" />
+						<v-divider class="my-5" />
 
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model.trim="form.email"
-										required
-										label="Email"
-										:rules="[
-											(v) => !!v || 'Email must be filled',
-											(v) =>
-												!v ||
-												/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
-													v
-												) ||
-												'Email must be valid',
-										]"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model="form.password"
-										required
-										:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-										:type="showPassword ? 'text' : 'password'"
-										label="Password"
-										:rules="[(v) => !!v || 'Password must be filled']"
-										@click:append="showPassword = !showPassword"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model="form.passwordAgain"
-										required
-										label="Password again"
-										:rules="[passwordFilled, passwordMatched]"
-										:append-icon="showPasswordAgain ? 'mdi-eye' : 'mdi-eye-off'"
-										:type="showPasswordAgain ? 'text' : 'password'"
-										@click:append="showPasswordAgain = !showPasswordAgain"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model.trim="form.firstname"
-										required
-										label="Firstname"
-										:rules="[(v) => !!v || 'Name must be filled']"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-text-field
-										v-model.trim="form.lastname"
-										required
-										label="Lastname"
-										:rules="[(v) => !!v || 'Lastname must be filled']"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col>
-									<v-btn
-										min-width="150"
-										color="info"
-										class="white--text float-right"
-										@click="signUp"
-									>
-										SignUp
-									</v-btn>
-								</v-col>
-							</v-row>
-						</v-container>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model.trim="form.email"
+									required
+									label="Email"
+									:rules="[
+										(v) => !!v || 'Email must be filled',
+										(v) =>
+											!v ||
+											/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+												v
+											) ||
+											'Email must be valid',
+									]"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model.trim="form.firstname"
+									required
+									label="Firstname"
+									:rules="[(v) => !!v || 'Name must be filled']"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model.trim="form.lastname"
+									required
+									label="Lastname"
+									:rules="[(v) => !!v || 'Lastname must be filled']"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model="form.password"
+									required
+									:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+									:type="showPassword ? 'text' : 'password'"
+									label="Password"
+									:rules="[(v) => !!v || 'Password must be filled']"
+									@click:append="showPassword = !showPassword"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-text-field
+									v-model="form.passwordAgain"
+									required
+									label="Password again"
+									:rules="[passwordFilled, passwordMatched]"
+									:append-icon="showPasswordAgain ? 'mdi-eye' : 'mdi-eye-off'"
+									:type="showPasswordAgain ? 'text' : 'password'"
+									@click:append="showPasswordAgain = !showPasswordAgain"
+								/>
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col>
+								<v-btn
+									min-width="150"
+									color="info"
+									class="white--text float-right"
+									@click="signUp"
+								>
+									SignUp
+								</v-btn>
+							</v-col>
+						</v-row>
 					</v-form>
 				</v-card>
 			</v-col>
@@ -209,5 +212,9 @@ section {
 	font-family: "Roboto";
 	font-size: xx-large;
 	color: dimgrey;
+}
+
+.form {
+	padding: 30px;
 }
 </style>
