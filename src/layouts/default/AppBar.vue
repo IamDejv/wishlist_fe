@@ -10,11 +10,15 @@
 		height="70"
 		flat
 	>
-		<v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
+		<v-app-bar-nav-icon @click="drawer = !drawer" />
 
 		<v-toolbar-title class="font-weight-light text-h5" v-text="name.title" />
 
 		<v-spacer />
+
+		<create-group-modal></create-group-modal>
+
+		<add-friend-modal></add-friend-modal>
 
 		<default-go-home />
 
@@ -25,11 +29,15 @@
 <script>
 // Utilities
 import { get, sync } from "vuex-pathify";
+import AddFriendModal from "@/components/AddFriendModal";
+import CreateGroupModal from "@/components/CreateGroupModal";
 
 export default {
 	name: "DefaultBar",
 
 	components: {
+		CreateGroupModal,
+		AddFriendModal,
 		DefaultAccount: () =>
 			import(
 				/* webpackChunkName: "default-account" */

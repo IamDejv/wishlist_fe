@@ -58,7 +58,7 @@ export default {
 
 	methods: {
 		logout() {
-			this.$router.push({ name: "SignOut" });
+			this.$router.push("sign-out");
 		},
 	},
 };

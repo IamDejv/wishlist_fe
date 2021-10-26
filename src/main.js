@@ -6,6 +6,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "./plugins";
 import { auth } from "@/firebase/firebase";
+import axios from "axios";
 
 Vue.config.productionTip = false;
 
@@ -20,5 +21,9 @@ auth.onAuthStateChanged(() => {
 			store,
 			render: (h) => h(App),
 		}).$mount("#app");
+
+		auth.currentUser.getIdToken().then((id) => {
+			axios.defaults.headers["Authentication"] = id;
+		});
 	}
 });

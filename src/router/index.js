@@ -14,10 +14,10 @@ const requireAuth = async (to, form, next) => {
 };
 
 const isAuth = async (to, from, next) => {
-	if (!auth.methods.getLoggedUser()) {
+	if (auth.methods.getLoggedUser()) {
 		next();
 	} else {
-		next("");
+		next();
 	}
 };
 

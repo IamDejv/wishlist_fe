@@ -1,7 +1,13 @@
 import axios from "axios";
+import auth from "@/mixins/auth";
 
 export const axiosInstance = async () => {
-	const options = {};
+	const token = await auth.methods.getTokenResult();
+	const options = {
+		headers: {
+			Authentication: token,
+		},
+	};
 
 	const instance = axios.create(options);
 

@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import {auth, prepareErrorMessage} from "@/firebase/firebase";
+import { auth, prepareErrorMessage } from "@/firebase/firebase";
 import authMixin from "@/mixins/auth";
 import firebase from "firebase/app";
 import "firebase/auth";
-import {sync} from "vuex-pathify";
+import { sync } from "vuex-pathify";
 import axios from "axios";
 
 export default {
@@ -142,8 +142,24 @@ export default {
 				};
 				auth.signInWithEmailAndPassword(login, password)
 					.then((response) => {
-						this.storeUser(response);
-						this.$router.push({ name: "Dashboard" });
+						axios
+							.get("me")
+							.then(() => {
+								this.storeUser(response);
+								this.$router.push({ name: "Dashboard" });
+							})
+							.catch((e) => {
+								this.storeUser(response);
+								if (e.response.status === 404) {
+									this.$router.push({ name: "SignUp" });
+								} else {
+									this.snackbar = {
+										open: true,
+										message: e.response?.message || "Something went wrong",
+										type: "error",
+									};
+								}
+							});
 					})
 					.catch((e) => {
 						this.snackbar = {
@@ -161,8 +177,7 @@ export default {
 			provider.addScope("email");
 			auth.signInWithPopup(provider)
 				.then(async ({ additionalUserInfo }) => {
-					axios.defaults.headers["Authentication"] =
-						await this.getLoggedUser().getIdToken();
+					await this.storeUser();
 
 					this.firstname = additionalUserInfo.profile.given_name;
 					this.lastname = additionalUserInfo.profile.family_name;
@@ -217,7 +232,7 @@ export default {
 					if (response.additionalUserInfo.isNewUser) {
 						this.$router.push({ name: "SignUp" });
 					} else {
-						this.storeUser(response);
+						this.storeUser();
 						this.$router.push({ name: "Dashboard" });
 					}
 				})
@@ -248,7 +263,7 @@ export default {
 		},
 
 		async storeUser() {
-			localStorage.setItem("staySigned", JSON.stringify(this.staySigned));
+			axios.defaults.headers["Authentication"] = await this.getLoggedUser().getIdToken();
 		},
 
 		validate() {

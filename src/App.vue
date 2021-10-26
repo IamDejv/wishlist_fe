@@ -28,12 +28,13 @@ export default {
 		...sync("user", ["firstname", "lastname", "image"]),
 	},
 
-	created() {
-		const providerData = this.getLoggedUser()?.providerData;
-		if (providerData) {
+	async created() {
+		const loggedUser = this.getLoggedUser();
+		const providerData = loggedUser?.providerData;
+		if (providerData && providerData[0].displayName) {
 			const displayName = providerData[0]?.displayName;
 
-			const nameParts = displayName.split(" ");
+			const nameParts = displayName?.split(" ");
 
 			this.firstname = nameParts[0];
 			this.lastname = nameParts[1];

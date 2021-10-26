@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid tag="section">
 		<v-row justify="center">
-			<v-col cols="12" md="3">
+			<v-col cols="12" md="5" lg="4" sm="8" xl="3">
 				<v-card>
 					<v-form ref="form" class="form">
 						<v-row>
@@ -23,6 +23,7 @@
 									v-model.trim="form.email"
 									required
 									label="Email"
+									:disabled="registered"
 									:rules="[
 										(v) => !!v || 'Email must be filled',
 										(v) =>
@@ -104,9 +105,13 @@
 import { auth, prepareErrorMessage } from "@/firebase/firebase";
 import "firebase/auth";
 import { sync } from "vuex-pathify";
+import axios from "axios";
+import authMixin from "@/mixins/auth";
 
 export default {
 	name: "SignUp",
+
+	mixins: [authMixin],
 
 	data: () => ({
 		form: {
@@ -118,10 +123,19 @@ export default {
 		},
 		showPassword: false,
 		showPasswordAgain: false,
+		registered: false,
 	}),
 
 	computed: {
 		snackbar: sync("app/snackbar"),
+	},
+
+	created() {
+		const user = this.getLoggedUser();
+		if (user) {
+			this.registered = true;
+			this.form.email = user.email;
+		}
 	},
 
 	methods: {
@@ -132,18 +146,25 @@ export default {
 
 				if (password !== passwordAgain) return;
 
-				await auth
-					.createUserWithEmailAndPassword(email, password)
-					.then(() => {
-						successfulRegistration = true;
-					})
-					.catch((e) => {
-						this.snackbar = {
-							open: true,
-							message: prepareErrorMessage(e),
-							type: "error",
-						};
-					});
+				if (!this.registered) {
+					await auth
+						.createUserWithEmailAndPassword(email, password)
+						.then(async () => {
+							axios.defaults.headers["Authentication"] =
+								await auth.currentUser.getIdToken();
+
+							successfulRegistration = true;
+						})
+						.catch((e) => {
+							this.snackbar = {
+								open: true,
+								message: prepareErrorMessage(e),
+								type: "error",
+							};
+						});
+				} else {
+					successfulRegistration = true;
+				}
 
 				if (successfulRegistration) {
 					const body = {
@@ -151,24 +172,21 @@ export default {
 						lastname: this.prepareLastname(lastname),
 						email,
 					};
-					console.log(body);
-					// await LoginService.signUp(body)
-					// 	.then(() => {
-					// 		this.snackbar = {
-					// 			open: true,
-					// 			message: "Byl jste zaregistrován, můžete přejít k přihlášení",
-					// 			type: "success",
-					// 		};
-					// 		auth.signOut();
-					// 		this.$router.push({ name: "Login" });
-					// 	})
-					// 	.catch((e) => {
-					// 		this.snackbar = {
-					// 			open: true,
-					// 			message: e.message,
-					// 			type: "error",
-					// 		};
-					// 	});
+
+					const url = "public/sign-up";
+
+					axios
+						.post(url, body)
+						.then(() => {
+							this.$router.push({ name: "Dashboard" });
+						})
+						.catch((e) => {
+							this.snackbar = {
+								open: true,
+								message: e.response?.message || "Something went wrong",
+								type: "error",
+							};
+						});
 				}
 			}
 		},
