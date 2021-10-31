@@ -1,17 +1,16 @@
 <template>
 	<v-card class="mx-auto" max-width="344">
-		<v-img :src="group.image" height="200px"></v-img>
+		<v-img :src="wishlist.image" height="200px"></v-img>
 
-		<v-card-title class="text-h3"> {{ group.name }} </v-card-title>
-
-		<v-card-subtitle> {{ group.description }} </v-card-subtitle>
+		<v-card-title class="text-h3"> {{ wishlist.name }} </v-card-title>
 
 		<v-card-actions>
-			<router-link :to="`groups/${group.id}`" style="text-decoration: none">
+			<router-link :to="`wishlists/${wishlist.id}`" style="text-decoration: none">
 				<v-btn color="orange lighten-2" text> Detail </v-btn>
 			</router-link>
+
 			<v-spacer></v-spacer>
-			<v-btn :color="iconColour" icon @click="setActive">
+			<v-btn :color="iconColour" icon @click="setActive()">
 				<v-icon>{{ icon }}</v-icon>
 			</v-btn>
 		</v-card-actions>
@@ -20,20 +19,20 @@
 
 <script>
 import axios from "axios";
-import { EventBus, GROUP_SET_ACTIVE } from "@/utils/event-bus";
+import { EventBus, WISHLIST_SET_ACTIVE } from "@/utils/event-bus";
 import { sync } from "vuex-pathify";
 
 export default {
-	name: "GroupCard",
+	name: "WishlistCard",
 	props: {
-		group: Object,
+		wishlist: Object,
 	},
 	computed: {
 		icon() {
-			return this.group.active ? "mdi-check-circle" : "mdi-check-circle-outline";
+			return this.wishlist.active ? "mdi-check-circle" : "mdi-check-circle-outline";
 		},
 		iconColour() {
-			return this.group.active ? "green lighten2" : "default";
+			return this.wishlist.active ? "green lighten2" : "default";
 		},
 		snackbar: sync("app/snackbar"),
 	},
@@ -44,10 +43,10 @@ export default {
 	},
 	methods: {
 		setActive() {
-			const url = `me/groups/active`;
+			const url = `me/wishlists/active`;
 			const body = {
-				id: this.group.id,
-				action: !this.group.active ? "setActive" : "setInactive",
+				id: this.wishlist.id,
+				action: !this.wishlist.active ? "setActive" : "setInactive",
 			};
 
 			axios
@@ -55,10 +54,10 @@ export default {
 				.then((response) => {
 					this.snackbar = {
 						open: true,
-						message: "Change active group",
+						message: "Changed active wishlist",
 						type: "success",
 					};
-					EventBus.$emit(GROUP_SET_ACTIVE, response.data);
+					EventBus.$emit(WISHLIST_SET_ACTIVE, response.data);
 				})
 				.catch((e) => {
 					if (e.response) {

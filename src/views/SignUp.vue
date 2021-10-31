@@ -6,7 +6,12 @@
 					<v-form ref="form" class="form">
 						<v-row>
 							<v-col md="5">
-								<v-btn class="text-right" color="grey darken-3" :to="{ name: 'Login' }" exact>
+								<v-btn
+									class="text-right"
+									color="grey darken-3"
+									:to="{ name: 'Login' }"
+									exact
+								>
 									<v-icon>mdi-arrow-left-bold</v-icon>
 								</v-btn>
 							</v-col>
@@ -28,9 +33,7 @@
 										(v) => !!v || 'Email must be filled',
 										(v) =>
 											!v ||
-											/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
-												v
-											) ||
+											/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
 											'Email must be valid',
 									]"
 								/>

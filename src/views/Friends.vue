@@ -2,7 +2,7 @@
 	<v-container fluid>
 		<v-row justify="center">
 			<v-col v-for="friend in friends" :key="friend.id" cols="12" md="12">
-				<v-sheet elevation="6" class="mx-auto" height="100">
+				<v-sheet elevation="6" class="mx-auto" height="100" rounded>
 					<v-row class="pt-3 pl-5">
 						<v-col cols="12" md="1">
 							<v-avatar color="blue" size="60">
@@ -22,7 +22,7 @@
 								tooltip="Wishlist"
 								icon="mdi-note-edit"
 								position=""
-								@onClick="openWishlist"
+								@onClick="openWishlist(friend)"
 							></button-hover>
 							<button-hover
 								color="error"
@@ -44,6 +44,7 @@ import ButtonHover from "@/components/ButtonHover";
 import axios from "axios";
 import auth from "@/mixins/auth";
 import { sync } from "vuex-pathify";
+import { EventBus, FRIEND_ADDED } from "@/utils/event-bus";
 
 export default {
 	name: "Friends",
@@ -63,6 +64,7 @@ export default {
 		};
 	},
 	created() {
+		EventBus.$on(FRIEND_ADDED, (friend) => this.friends.push(friend));
 		this.fetchData();
 	},
 	methods: {
@@ -82,11 +84,33 @@ export default {
 					};
 				});
 		},
-		openWishlist() {
-			this.$router.push("wishlists");
+		openWishlist(friend) {
+			this.$router.push({ name: "FriendWishlist", params: { userId: friend.id } });
 		},
 		removeFriend(friend) {
-			console.log(friend);
+			const uri = `me/friends`;
+			const body = {
+				id: friend.id,
+				action: "remove",
+			};
+
+			axios
+				.put(uri, body)
+				.then((response) => {
+					this.friends = this.friends.filter((item) => item.id !== response.data.id);
+					this.snackbar = {
+						open: true,
+						message: "User removed from friends",
+						type: "success",
+					};
+				})
+				.catch((e) => {
+					this.snackbar = {
+						open: true,
+						message: e.response?.message || "Something went wrong",
+						type: "error",
+					};
+				});
 		},
 	},
 };

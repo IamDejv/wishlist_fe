@@ -7,6 +7,7 @@
 				<div class="text-h4 pt-8 pb-10">Page not found :(</div>
 
 				<v-btn depressed large to="/"> Get me out! </v-btn>
+				<v-btn class="ml-5" depressed large @click="$router.go(-1)"> Back </v-btn>
 			</v-col>
 		</v-row>
 	</v-container>

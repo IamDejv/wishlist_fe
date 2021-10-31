@@ -141,7 +141,9 @@ export default {
 					password: this.credentials.password,
 				};
 				auth.signInWithEmailAndPassword(login, password)
-					.then((response) => {
+					.then(async (response) => {
+						await this.storeUser();
+
 						axios
 							.get("me")
 							.then(() => {
@@ -150,7 +152,7 @@ export default {
 							})
 							.catch((e) => {
 								this.storeUser(response);
-								if (e.response.status === 404) {
+								if (e.response.status === 401) {
 									this.$router.push({ name: "SignUp" });
 								} else {
 									this.snackbar = {

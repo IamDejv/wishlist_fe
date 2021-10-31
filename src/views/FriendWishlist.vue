@@ -1,22 +1,13 @@
 <template>
-	<v-container fluid>
-		<product-list my />
-	</v-container>
+	<v-container fluid> <product-list /> </v-container>
 </template>
 
 <script>
 import ProductList from "@/components/ProductList";
 
 export default {
-	name: "Dashboard",
+	name: "FriendWishlist",
 	components: { ProductList },
-	data() {
-		return {
-			products: [],
-			skeletons: 0,
-			loading: true,
-		};
-	},
 };
 </script>
 

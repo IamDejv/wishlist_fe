@@ -68,6 +68,8 @@
 import axios from "axios";
 import { addQueryParams } from "@/utils/helpers";
 import auth from "@/mixins/auth";
+import { EventBus, FRIEND_ADDED } from "@/utils/event-bus";
+import { sync } from "vuex-pathify";
 
 export default {
 	name: "AddFriendModal",
@@ -87,14 +89,23 @@ export default {
 			return user.firstname.charAt(0) + user.lastname.charAt(0);
 		},
 	},
+	computed: {
+		snackbar: sync("app/snackbar"),
+	},
 	methods: {
 		addFriend(id) {
 			const url = `users/${this.getLoggedUserId()}/friends`;
 
 			axios
-				.put(url, { id })
-				.then(() => {
-					console.log("hello");
+				.put(url, { id, action: "add" })
+				.then((response) => {
+					this.snackbar = {
+						open: true,
+						message: "Friend added",
+						type: "success",
+					};
+					this.users = this.users.filter((user) => user.id !== response.data.id);
+					EventBus.$emit(FRIEND_ADDED, response.data);
 				})
 				.catch((e) => {
 					if (e.response) {

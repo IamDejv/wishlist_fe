@@ -3,12 +3,12 @@
 		<v-dialog v-model="dialog" persistent max-width="600px">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn color="primary" dark v-bind="attrs" v-on="on">
-					<v-icon>mdi-plus</v-icon> Create Group
+					<v-icon>mdi-plus</v-icon> Create Wishlist
 				</v-btn>
 			</template>
 			<v-card>
 				<v-card-title>
-					<span class="text-h5">Create Group</span>
+					<span class="text-h5">Create Wishlist</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
@@ -23,28 +23,11 @@
 									/>
 								</v-col>
 								<v-col cols="12" md="12">
-									<v-textarea
-										v-model.trim="form.description"
-										required
-										label="Description"
-										:rules="[(v) => !!v || 'Description must be filled']"
-									/>
-								</v-col>
-								<v-col cols="12" md="12">
-									<v-select
-										v-model="form.type"
-										required
-										label="Type"
-										:rules="[(v) => !!v || 'Type must be select']"
-										:items="options.type"
-									/>
-								</v-col>
-								<v-col cols="12" md="12">
 									<v-text-field
 										v-model.trim="form.image"
 										required
 										label="Image"
-										:rules="[(v) => !!v || 'Name must be filled']"
+										:rules="[(v) => !!v || 'Image must be selected']"
 									/>
 								</v-col>
 							</v-row>
@@ -65,31 +48,17 @@
 import axios from "axios";
 import { sync } from "vuex-pathify";
 import auth from "@/mixins/auth";
-import { EventBus, GROUP_CREATED } from "@/utils/event-bus";
+import { EventBus, WISHLIST_CREATED } from "@/utils/event-bus";
 
 export default {
-	name: "CreateGroupModal",
+	name: "CreateWishlistModal",
 	mixins: [auth],
 	data() {
 		return {
 			dialog: false,
 			form: {
 				name: "",
-				description: "",
-				type: "",
 				image: "https://www.history.com/.image/t_share/MTY4ODE4ODA4MzY1MDAwNDY1/christmas-gettyimages-184652817.jpg",
-			},
-			options: {
-				type: [
-					{
-						text: "Basic",
-						value: "basic",
-					},
-					{
-						text: "Secret Santa",
-						value: "secret_santa",
-					},
-				],
 			},
 		};
 	},
@@ -104,14 +73,14 @@ export default {
 					user: this.getLoggedUserId(),
 				};
 				axios
-					.post("groups", body)
+					.post("wishlists", body)
 					.then((response) => {
 						this.snackbar = {
 							open: true,
-							message: "Group created",
+							message: "Wishlist created",
 							type: "success",
 						};
-						EventBus.$emit(GROUP_CREATED, response.data);
+						EventBus.$emit(WISHLIST_CREATED, response.data);
 						this.dialog = false;
 					})
 					.catch((e) => {

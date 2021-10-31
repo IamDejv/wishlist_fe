@@ -4,8 +4,8 @@
 			<v-btn
 				class="mx-2"
 				fab
-				dark
 				small
+				icon
 				:color="color"
 				v-bind="attrs"
 				v-on="on"

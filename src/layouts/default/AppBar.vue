@@ -16,9 +16,15 @@
 
 		<v-spacer />
 
-		<create-group-modal></create-group-modal>
+		<create-group-modal v-if="$route.name === 'Groups'"></create-group-modal>
 
-		<add-friend-modal></add-friend-modal>
+		<create-wishlist-modal v-if="$route.name === 'Wishlists'"></create-wishlist-modal>
+
+		<add-product-modal
+			v-if="$route.name === 'WishlistDetail' || $route.name === 'Dashboard'"
+		></add-product-modal>
+
+		<add-friend-modal v-if="$route.name === 'Friends'"></add-friend-modal>
 
 		<default-go-home />
 
@@ -31,11 +37,15 @@
 import { get, sync } from "vuex-pathify";
 import AddFriendModal from "@/components/AddFriendModal";
 import CreateGroupModal from "@/components/CreateGroupModal";
+import CreateWishlistModal from "@/components/CreateWishlistModal";
+import AddProductModal from "@/components/AddProductModal";
 
 export default {
 	name: "DefaultBar",
 
 	components: {
+		AddProductModal,
+		CreateWishlistModal,
 		CreateGroupModal,
 		AddFriendModal,
 		DefaultAccount: () =>

@@ -30,13 +30,8 @@ const state = {
 		},
 		{
 			title: "Wishlists",
-			icon: "mdi-note-edit",
-			to: "/wishlists",
-		},
-		{
-			title: "Products",
 			icon: "mdi-gift",
-			to: "/products",
+			to: "/wishlists",
 		},
 	],
 	version: "0.0.1",
