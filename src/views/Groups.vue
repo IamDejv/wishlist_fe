@@ -12,7 +12,7 @@
 					sm="6"
 					xs="12"
 				>
-					<v-sheet height="325" width="350" style="border-radius: 8px">
+					<v-sheet class="mx-auto" height="325" width="350" style="border-radius: 8px">
 						<v-skeleton-loader type="image, card-heading"></v-skeleton-loader>
 						<v-spacer></v-spacer>
 						<v-skeleton-loader class="pl-3 pt-5" type="button"></v-skeleton-loader>

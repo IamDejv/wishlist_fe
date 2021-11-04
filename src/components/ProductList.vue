@@ -43,6 +43,7 @@ export default {
 	components: { ProductCard },
 	props: {
 		my: Boolean,
+		wishlistId: String,
 	},
 	data() {
 		return {
@@ -80,8 +81,10 @@ export default {
 		},
 		fetchData() {
 			let url;
-			if (this.my) {
+			if (this.my && !this.wishlistId) {
 				url = `me/products`;
+			} else if (this.wishlistId) {
+				url = `wishlists/${this.wishlistId}/products`;
 			} else {
 				url = `users/${this.$route.params.userId}/products`;
 			}

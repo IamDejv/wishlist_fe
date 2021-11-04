@@ -16,12 +16,17 @@
 
 		<v-spacer />
 
-		<create-group-modal v-if="$route.name === 'Groups'"></create-group-modal>
+		<create-group-modal
+			v-if="$route.name === 'Groups' || $route.name === 'GroupDetail'"
+		></create-group-modal>
 
-		<create-wishlist-modal v-if="$route.name === 'Wishlists'"></create-wishlist-modal>
+		<create-wishlist-modal
+			v-if="$route.name === 'Wishlists' || $route.name === 'WishlistDetail'"
+		></create-wishlist-modal>
 
 		<add-product-modal
 			v-if="$route.name === 'WishlistDetail' || $route.name === 'Dashboard'"
+			class="ml-5"
 		></add-product-modal>
 
 		<add-friend-modal v-if="$route.name === 'Friends'"></add-friend-modal>

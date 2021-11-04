@@ -35,11 +35,6 @@ export default {
 		return {
 			model: 0,
 			products: [],
-			settings: {
-				slidesToShow: 4,
-				slidesToScroll: 4,
-				touchThreshold: 5,
-			},
 			options: {
 				rewind: true,
 				perPage: 0,

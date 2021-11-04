@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid> <product-list my /> </v-container>
+	<v-container fluid> <product-list my :wishlist-id="$route.params.wishlistId" /> </v-container>
 </template>
 
 <script>

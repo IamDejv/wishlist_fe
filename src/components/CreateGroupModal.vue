@@ -1,14 +1,16 @@
 <template>
 	<div class="text-center">
-		<v-dialog v-model="dialog" persistent max-width="600px">
+		<v-dialog v-model="dialog" persistent max-width="800px">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn color="primary" dark v-bind="attrs" v-on="on">
-					<v-icon>mdi-plus</v-icon> Create Group
+					<v-icon>mdi-plus</v-icon> {{ isEditing ? "Edit Group" : "Create Group" }}
 				</v-btn>
 			</template>
 			<v-card>
 				<v-card-title>
-					<span class="text-h5">Create Group</span>
+					<span class="text-h5">
+						{{ isEditing ? "Edit Group" : "Create Group" }}
+					</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
@@ -41,10 +43,17 @@
 								</v-col>
 								<v-col cols="12" md="12">
 									<v-text-field
-										v-model.trim="form.image"
 										required
+										disabled
 										label="Image"
-										:rules="[(v) => !!v || 'Name must be filled']"
+										:value="selectedImage"
+										:rules="[(v) => !!v || 'Image must be selected']"
+									/>
+								</v-col>
+								<v-col>
+									<image-select
+										:image="form.image"
+										@select="(image) => onImageSelect(image)"
 									/>
 								</v-col>
 							</v-row>
@@ -54,31 +63,32 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color="blue darken-1" text @click="dialog = false"> Close </v-btn>
-					<v-btn color="blue darken-1" text @click="create"> Save </v-btn>
+					<v-btn color="blue darken-1" text @click="submit"> Save </v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 	</div>
 </template>
-
 <script>
 import axios from "axios";
 import { sync } from "vuex-pathify";
-import auth from "@/mixins/auth";
-import { EventBus, GROUP_CREATED } from "@/utils/event-bus";
+import { EventBus, GROUP_CREATED, GROUP_EDITED } from "@/utils/event-bus";
+import ImageSelect from "@/components/ImageSelect";
 
 export default {
 	name: "CreateGroupModal",
-	mixins: [auth],
+	components: { ImageSelect },
 	data() {
 		return {
+			selectedImage: "",
 			dialog: false,
 			form: {
 				name: "",
 				description: "",
 				type: "",
-				image: "https://www.history.com/.image/t_share/MTY4ODE4ODA4MzY1MDAwNDY1/christmas-gettyimages-184652817.jpg",
+				image: "",
 			},
+			isEditing: false,
 			options: {
 				type: [
 					{
@@ -93,35 +103,103 @@ export default {
 			},
 		};
 	},
+	watch: {
+		$route: function () {
+			this.form = {};
+			this.isEditing = this.$route.name === "GroupDetail";
+			this.fetchGroup();
+		},
+	},
 	computed: {
 		snackbar: sync("app/snackbar"),
 	},
+	created() {
+		this.isEditing = this.$route.name === "GroupDetail";
+		this.fetchGroup();
+	},
 	methods: {
-		create() {
+		onImageSelect(image) {
+			this.form.image = image.path;
+			this.selectedImage = image.name;
+		},
+		submit() {
 			if (this.validate()) {
 				const body = {
 					...this.form,
-					user: this.getLoggedUserId(),
 				};
-				axios
-					.post("groups", body)
-					.then((response) => {
-						this.snackbar = {
-							open: true,
-							message: "Group created",
-							type: "success",
-						};
-						EventBus.$emit(GROUP_CREATED, response.data);
-						this.dialog = false;
-					})
-					.catch((e) => {
-						this.snackbar = {
-							open: true,
-							message: e.response?.message || "Something went wrong",
-							type: "error",
-						};
-					});
+
+				if (this.isEditing) {
+					this.edit(this.$route.params.groupId, body);
+				} else {
+					this.create(body);
+				}
 			}
+		},
+		create(body) {
+			axios
+				.post("me/groups", body)
+				.then((response) => {
+					this.snackbar = {
+						open: true,
+						message: "Group created",
+						type: "success",
+					};
+					EventBus.$emit(GROUP_CREATED, response.data);
+					this.dialog = false;
+				})
+				.catch((e) => {
+					this.snackbar = {
+						open: true,
+						message: e.response?.message || "Something went wrong",
+						type: "error",
+					};
+				});
+		},
+		edit(id, body) {
+			const url = `groups/${id}`;
+
+			axios
+				.put(url, body)
+				.then((response) => {
+					this.snackbar = {
+						open: true,
+						message: "Group Edited",
+						type: "success",
+					};
+					EventBus.$emit(GROUP_EDITED, response.data);
+					this.dialog = false;
+				})
+				.catch((e) => {
+					this.snackbar = {
+						open: true,
+						message: e.response?.message || "Something went wrong",
+						type: "error",
+					};
+				});
+		},
+		fetchGroup() {
+			if (!this.isEditing) {
+				return;
+			}
+			const groupId = this.$route.params.groupId;
+
+			const url = `groups/${groupId}`;
+
+			axios
+				.get(url)
+				.then((response) => {
+					this.form = {
+						...this.form,
+						...response.data,
+					};
+				})
+				.catch((e) => {
+					this.snackbar = {
+						open: true,
+						message: e.response?.message || "Something went wrong",
+						type: "error",
+					};
+				});
 		},
 		validate() {
 			return this.$refs.form.validate();

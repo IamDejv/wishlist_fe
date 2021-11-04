@@ -204,7 +204,12 @@ export default {
 			}
 		},
 		create(body) {
-			const url = `products`;
+			let url;
+			if (this.$route.name === "Dashboard") {
+				url = `me/products`;
+			} else {
+				url = `products`;
+			}
 
 			axios
 				.post(url, body)
@@ -289,17 +294,19 @@ export default {
 			await axios
 				.post(url, { link: this.form.url })
 				.then((response) => {
+					if (!this.isEditing) {
+						this.form = {
+							...this.form,
+							image: this.options.images[0],
+							name: response.data.name,
+							description: response.data.description,
+						};
+					}
 					this.options.images = new Set([
 						...this.options.images,
 						...response.data.image,
 						this.defaultImage,
 					]);
-					this.form = {
-						...this.form,
-						image: this.options.images[0],
-						name: response.data.name,
-						description: response.data.description,
-					};
 				})
 				.catch((e) => {
 					this.snackbar = {

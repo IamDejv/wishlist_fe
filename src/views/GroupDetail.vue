@@ -117,6 +117,7 @@ import { sync } from "vuex-pathify";
 import ButtonHover from "@/components/ButtonHover";
 import UserWishlist from "@/components/Group/UserWishlist";
 import auth from "@/mixins/auth";
+import { EventBus, GROUP_EDITED } from "@/utils/event-bus";
 
 export default {
 	name: "GroupDetail",
@@ -136,6 +137,7 @@ export default {
 		};
 	},
 	created() {
+		EventBus.$on(GROUP_EDITED, (group) => (this.group = group));
 		this.fetchData();
 	},
 	computed: {

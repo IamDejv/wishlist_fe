@@ -1,10 +1,8 @@
 <template>
 	<v-card class="mx-auto" max-width="344">
-		<v-img :src="group.image" height="200px"></v-img>
+		<v-img :src="group.image | imagePath" height="200px"></v-img>
 
 		<v-card-title class="text-h3"> {{ group.name }} </v-card-title>
-
-		<v-card-subtitle> {{ group.description }} </v-card-subtitle>
 
 		<v-card-actions>
 			<router-link :to="`groups/${group.id}`" style="text-decoration: none">
@@ -22,11 +20,17 @@
 import axios from "axios";
 import { EventBus, GROUP_SET_ACTIVE } from "@/utils/event-bus";
 import { sync } from "vuex-pathify";
+import CONST from "@/consts";
 
 export default {
 	name: "GroupCard",
 	props: {
 		group: Object,
+	},
+	filters: {
+		imagePath(path) {
+			return `${CONST.API_HOST}/${path}`;
+		},
 	},
 	computed: {
 		icon() {

@@ -1,6 +1,6 @@
 <template>
 	<v-card class="mx-auto" max-width="344">
-		<v-img :src="wishlist.image" height="200px"></v-img>
+		<v-img :src="wishlist.image | imagePath" height="200px"></v-img>
 
 		<v-card-title class="text-h3"> {{ wishlist.name }} </v-card-title>
 
@@ -21,11 +21,17 @@
 import axios from "axios";
 import { EventBus, WISHLIST_SET_ACTIVE } from "@/utils/event-bus";
 import { sync } from "vuex-pathify";
+import CONST from "@/consts";
 
 export default {
 	name: "WishlistCard",
 	props: {
 		wishlist: Object,
+	},
+	filters: {
+		imagePath(path) {
+			return `${CONST.API_HOST}/${path}`;
+		},
 	},
 	computed: {
 		icon() {
