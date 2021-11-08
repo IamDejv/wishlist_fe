@@ -22,7 +22,7 @@ auth.onAuthStateChanged(() => {
 			render: (h) => h(App),
 		}).$mount("#app");
 
-		auth.currentUser.getIdToken().then((id) => {
+		auth.currentUser?.getIdToken().then((id) => {
 			axios.defaults.headers["Authentication"] = id;
 		});
 	}

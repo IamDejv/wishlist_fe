@@ -16,7 +16,7 @@
 				</v-sheet>
 			</v-col>
 		</v-row>
-		<v-row v-else>
+		<v-row v-else-if="products.length">
 			<v-col
 				v-for="product in products"
 				:key="product.id"
@@ -25,10 +25,17 @@
 				lg="3"
 				md="4"
 				sm="6"
-				xs="12"
+				xs="6"
 			>
 				<product-card :product="product" :show-buttons="my" />
 			</v-col>
+		</v-row>
+		<v-row v-else>
+			<div class="center">
+				<div class="font-weight-bold text--transparent grey--text text--lighten-2 text-h1">
+					{{ t("empty") }}
+				</div>
+			</div>
 		</v-row>
 	</v-row>
 </template>
@@ -37,10 +44,12 @@
 import ProductCard from "@/components/ProductCard";
 import { EventBus, PRODUCT_ADDED, PRODUCT_EDITED, PRODUCT_REMOVED } from "@/utils/event-bus";
 import axios from "axios";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "ProductList",
 	components: { ProductCard },
+	mixins: [locale],
 	props: {
 		my: Boolean,
 		wishlistId: String,
@@ -97,7 +106,7 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				})
@@ -118,4 +127,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+</style>

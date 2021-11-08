@@ -6,7 +6,9 @@
 					<v-form ref="form" class="form">
 						<v-row>
 							<v-col>
-								<div class="sign-in-header text-center">Sign in</div>
+								<div class="sign-in-header text-center">
+									{{ t("login.loginText") }}
+								</div>
 							</v-col>
 						</v-row>
 						<v-row>
@@ -44,7 +46,7 @@
 							<v-col>
 								<v-text-field
 									v-model="credentials.login"
-									label="Email"
+									:label="t('login.email')"
 									:rules="[(v) => !!v || 'Email must be filled']"
 									@keypress.enter="onLogin"
 								/>
@@ -56,7 +58,7 @@
 									v-model="credentials.password"
 									:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
 									:type="showPassword ? 'text' : 'password'"
-									label="Password"
+									:label="t('login.password')"
 									:rules="[(v) => !!v || 'Password must be filled']"
 									@keypress.enter="onLogin"
 									@click:append="showPassword = !showPassword"
@@ -73,7 +75,7 @@
 									class="white--text"
 									@click="onLogin"
 								>
-									Login
+									{{ t("login.login") }}
 								</v-btn>
 							</v-col>
 						</v-row>
@@ -83,7 +85,7 @@
 									:to="{ name: 'ForgotPassword' }"
 									class="forgot-password"
 								>
-									Forgot Password?
+									{{ t("login.forgotPassword") }}
 								</router-link>
 							</v-col>
 						</v-row>
@@ -94,7 +96,7 @@
 									:to="{ name: 'SignUp' }"
 									class="v-btn white--text v-size--x-large v-btn--block success"
 								>
-									Create New Account
+									{{ t("login.createAccount") }}
 								</router-link>
 							</v-col>
 						</v-row>
@@ -112,12 +114,11 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { sync } from "vuex-pathify";
 import axios from "axios";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "Login",
-
-	mixins: [authMixin],
-
+	mixins: [authMixin, locale],
 	data: () => ({
 		credentials: {
 			login: "",
@@ -127,12 +128,10 @@ export default {
 		valid: true,
 		showPassword: false,
 	}),
-
 	computed: {
 		snackbar: sync("app/snackbar"),
 		...sync("user", ["firstname", "lastname", "image"]),
 	},
-
 	methods: {
 		onLogin() {
 			if (this.validate()) {
@@ -157,7 +156,7 @@ export default {
 								} else {
 									this.snackbar = {
 										open: true,
-										message: e.response?.message || "Something went wrong",
+										message: e.response?.message || this.t("error.default"),
 										type: "error",
 									};
 								}
@@ -172,7 +171,6 @@ export default {
 					});
 			}
 		},
-
 		onGoogleLogin() {
 			const provider = new firebase.auth.GoogleAuthProvider();
 			provider.addScope("profile");
@@ -209,7 +207,7 @@ export default {
 									} else {
 										this.snackbar = {
 											open: true,
-											message: e.response?.message || "Something went wrong",
+											message: e.response?.message || this.t("error.default"),
 											type: "error",
 										};
 									}
@@ -225,7 +223,6 @@ export default {
 					};
 				});
 		},
-
 		onFacebookLogin() {
 			const provider = new firebase.auth.FacebookAuthProvider();
 			provider.addScope("user_birthday");
@@ -246,7 +243,6 @@ export default {
 					};
 				});
 		},
-
 		signUp(body) {
 			const url = "public/sign-up";
 
@@ -258,12 +254,11 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				});
 		},
-
 		async storeUser() {
 			axios.defaults.headers["Authentication"] = await this.getLoggedUser().getIdToken();
 		},
@@ -277,7 +272,7 @@ export default {
 
 <style scoped>
 section {
-	margin-top: 10%;
+	margin-top: 5%;
 }
 
 .forgot-password {

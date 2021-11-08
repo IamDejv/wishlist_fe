@@ -1,6 +1,6 @@
 export default {
 	methods: {
-		async confirm ({ title, text, type }) {
+		async confirm({ title, text, type }) {
 			return this.$dialog.confirm({
 				title,
 				text,
@@ -12,22 +12,22 @@ export default {
 						color: this.getColor(type),
 					},
 				},
-			})
+			});
 		},
 
-		getColor (type) {
+		getColor(type) {
 			switch (type) {
 				case "error":
-					return "red"
+					return "red";
 				case "info":
-					return "blue"
+					return "blue";
 				case "success":
-					return "green"
+					return "green";
 				case "warning":
-					return "orange"
+					return "orange";
 				default:
-					return "black"
+					return "black";
 			}
 		},
 	},
-}
+};

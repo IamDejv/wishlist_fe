@@ -39,10 +39,12 @@
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import CONST from "@/consts";
 import axios from "axios";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "ImageSelect",
 	components: { Splide, SplideSlide },
+	mixins: [locale],
 	props: {
 		image: String,
 	},
@@ -74,7 +76,7 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				})

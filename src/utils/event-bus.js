@@ -13,3 +13,6 @@ export const PRODUCT_ADDED = "productAdded";
 export const PRODUCT_REMOVED = "productRemoved";
 export const EDIT_PRODUCT = "editProduct";
 export const PRODUCT_EDITED = "productEdited";
+export const FRIEND_REMOVED_FROM_GROUP = "friendRemovedFromGroup";
+export const FRIEND_ADDED_TO_GROUP = "friendAddedToGroup";
+export const FRIEND_CONFIRMED = "friendConfirmed";

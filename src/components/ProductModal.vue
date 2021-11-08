@@ -9,7 +9,8 @@
 		>
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn color="primary" dark v-bind="attrs" v-on="on">
-					<v-icon>mdi-plus</v-icon> Add Product
+					<v-icon>mdi-plus</v-icon>
+					<span v-if="!isExtraSmall"> {{ t("button.addProduct") }} </span>
 				</v-btn>
 			</template>
 			<v-card>
@@ -17,15 +18,17 @@
 					<v-btn icon dark @click="dialog = false">
 						<v-icon>mdi-close</v-icon>
 					</v-btn>
-					<v-toolbar-title>Add product</v-toolbar-title>
+					<v-toolbar-title>{{ t("button.addProduct") }}</v-toolbar-title>
 					<v-spacer></v-spacer>
 					<v-toolbar-items>
-						<v-btn v-if="step === 2" dark text @click="submit"> Save </v-btn>
+						<v-btn v-if="step === 2" dark text @click="submit">{{
+							t("form.save")
+						}}</v-btn>
 					</v-toolbar-items>
 				</v-toolbar>
 				<v-stepper v-model="step" vertical elevation="0">
 					<v-stepper-step :complete="step > 1" step="1" editable>
-						Add product link
+						{{ t("form.product.link") }}
 					</v-stepper-step>
 
 					<v-stepper-content step="1">
@@ -35,18 +38,22 @@
 									<v-text-field
 										v-model.trim="form.url"
 										required
-										label="Link where to buy product"
+										:label="t('form.product.linkPlaceholder')"
 										:rules="[(v) => !!v || 'Link must be filled']"
 									/>
 								</v-col>
 							</v-row>
 						</v-form>
-						<v-btn color="primary" @click="nextStep(2)"> Continue </v-btn>
-						<v-btn class="ml-4" color="primary" @click="skip(2)"> Skip </v-btn>
+						<v-btn color="primary" @click="nextStep(2)">
+							{{ t("form.continue") }}
+						</v-btn>
+						<v-btn class="ml-4" color="primary" @click="skip(2)">
+							{{ t("form.skip") }}
+						</v-btn>
 					</v-stepper-content>
 
 					<v-stepper-step :complete="step > 2" step="2" :editable="isEditing">
-						Create or Edit product
+						{{ t("form.product.createOrEdit") }}
 					</v-stepper-step>
 
 					<v-stepper-content step="2">
@@ -59,7 +66,7 @@
 												<v-text-field
 													v-model.trim="form.name"
 													required
-													label="Name"
+													:label="t('form.product.name')"
 													:rules="[
 														(v) => !!v || 'Name must be filled',
 														(v) =>
@@ -72,7 +79,7 @@
 												<v-textarea
 													v-model.trim="form.description"
 													required
-													label="Description"
+													:label="t('form.product.description')"
 													:rules="[
 														(v) => !!v || 'Description must be filled',
 													]"
@@ -83,7 +90,7 @@
 													v-model.number="form.price"
 													required
 													type="number"
-													label="Price"
+													:label="t('form.product.price')"
 													:rules="[(v) => !!v || 'Price must be filled']"
 												/>
 											</v-col>
@@ -140,7 +147,7 @@
 									</v-form>
 								</v-container>
 							</v-card-text>
-							<v-btn color="primary" @click="submit"> Save </v-btn>
+							<v-btn color="primary" @click="submit"> {{ t("form.save") }} </v-btn>
 						</v-card>
 					</v-stepper-content>
 				</v-stepper>
@@ -152,12 +159,13 @@
 <script>
 import axios from "axios";
 import { sync } from "vuex-pathify";
-import auth from "@/mixins/auth";
 import { EventBus, PRODUCT_ADDED, EDIT_PRODUCT, PRODUCT_EDITED } from "@/utils/event-bus";
+import breakpoint from "@/mixins/breakpoint";
+import locale from "@/mixins/locale";
 
 export default {
-	name: "AddProductModal",
-	mixins: [auth],
+	name: "ProductModal",
+	mixins: [breakpoint, locale],
 	data() {
 		return {
 			dialog: false,
@@ -216,7 +224,7 @@ export default {
 				.then((response) => {
 					this.snackbar = {
 						open: true,
-						message: "Product added to wishlist",
+						message: this.t("snackbar.productAdded"),
 						type: "success",
 					};
 					EventBus.$emit(PRODUCT_ADDED, response.data);
@@ -226,7 +234,7 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				});
@@ -246,7 +254,7 @@ export default {
 				.then((response) => {
 					this.snackbar = {
 						open: true,
-						message: "Product edited",
+						message: this.t("snackbar.productEdited"),
 						type: "success",
 					};
 					EventBus.$emit(PRODUCT_EDITED, response.data);
@@ -256,7 +264,7 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				});
@@ -311,7 +319,7 @@ export default {
 				.catch((e) => {
 					this.snackbar = {
 						open: true,
-						message: e.response?.message || "Something went wrong",
+						message: e.response?.message || this.t("error.default"),
 						type: "error",
 					};
 				});

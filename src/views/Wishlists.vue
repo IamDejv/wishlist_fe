@@ -19,7 +19,7 @@
 					</v-sheet>
 				</v-col>
 			</v-row>
-			<v-row v-else>
+			<v-row v-else-if="wishlists.length">
 				<v-col
 					v-for="wishlist in wishlists"
 					:key="wishlist.id"
@@ -33,6 +33,20 @@
 					<wishlist-card :wishlist="wishlist" />
 				</v-col>
 			</v-row>
+			<v-row v-else>
+				<div class="center">
+					<div
+						class="
+							font-weight-bold
+							text--transparent text--lighten-2
+							grey--text
+							text-h1
+						"
+					>
+						{{ t("empty") }}
+					</div>
+				</div>
+			</v-row>
 		</v-row>
 	</v-container>
 </template>
@@ -42,10 +56,12 @@ import axios from "axios";
 import { sync } from "vuex-pathify";
 import { EventBus, WISHLIST_CREATED, WISHLIST_SET_ACTIVE } from "@/utils/event-bus";
 import WishlistCard from "@/components/WishlistCard";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "Wishlists",
 	components: { WishlistCard },
+	mixins: [locale],
 	data() {
 		return {
 			wishlists: [],
@@ -111,4 +127,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+</style>

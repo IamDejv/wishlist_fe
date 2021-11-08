@@ -3,30 +3,29 @@
 		<v-dialog v-model="dialog" width="800">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn color="primary" dark v-bind="attrs" v-on="on">
-					<v-icon>mdi-plus</v-icon> Add Friend
+					<v-icon>mdi-plus</v-icon>
+					<span v-if="!isExtraSmall"> {{ t("button.addFriend") }} </span>
 				</v-btn>
 			</template>
 
 			<v-card>
-				<v-card-title class="text-h5 grey darken-4"> Add Friend </v-card-title>
+				<v-card-title class="text-h5"> {{ t("button.addFriend") }} </v-card-title>
 
 				<v-card-text>
 					<v-row>
 						<v-col cols="12">
 							<v-text-field
 								v-model="searchValue"
-								label="Search"
 								prepend-icon="mdi-magnify"
+								:label="t('friends.search')"
 								:loading="loading"
-								@input="search"
+								@keypress.enter="search"
 							></v-text-field>
 						</v-col>
 					</v-row>
 					<v-divider></v-divider>
 
 					<v-list subheader>
-						<v-subheader>Recent chat</v-subheader>
-
 						<v-list-item v-for="user in users" :key="user.id">
 							<v-list-item-avatar>
 								<v-avatar color="blue" size="60">
@@ -57,7 +56,9 @@
 
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="primary" text @click="dialog = false"> Close </v-btn>
+					<v-btn color="primary" text @click="dialog = false">
+						{{ t("form.close") }}
+					</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -67,9 +68,11 @@
 <script>
 import axios from "axios";
 import { addQueryParams } from "@/utils/helpers";
-import auth from "@/mixins/auth";
 import { EventBus, FRIEND_ADDED } from "@/utils/event-bus";
 import { sync } from "vuex-pathify";
+import breakpoint from "@/mixins/breakpoint";
+import auth from "@/mixins/auth";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "AddFriendModal",
@@ -83,7 +86,7 @@ export default {
 			loading: false,
 		};
 	},
-	mixins: [auth],
+	mixins: [auth, breakpoint, locale],
 	filters: {
 		shortcut(user) {
 			return user.firstname.charAt(0) + user.lastname.charAt(0);
@@ -101,7 +104,7 @@ export default {
 				.then((response) => {
 					this.snackbar = {
 						open: true,
-						message: "Friend added",
+						message: this.t("snackbar.friendAdded"),
 						type: "success",
 					};
 					this.users = this.users.filter((user) => user.id !== response.data.id);
@@ -111,13 +114,17 @@ export default {
 					if (e.response) {
 						this.snackbar = {
 							open: true,
-							message: e.response?.message || "Something went wrong",
+							message: e.response?.message || this.t("error.default"),
 							type: "error",
 						};
 					}
 				});
 		},
 		search() {
+			if (!this.searchValue) {
+				return;
+			}
+
 			this.loading = true;
 			let url = "/users/new";
 
@@ -139,7 +146,7 @@ export default {
 					if (e.response) {
 						this.snackbar = {
 							open: true,
-							message: e.response?.message || "Something went wrong",
+							message: e.response?.message || this.t("error.default"),
 							type: "error",
 						};
 					}

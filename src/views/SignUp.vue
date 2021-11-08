@@ -1,22 +1,17 @@
 <template>
 	<v-container fluid tag="section">
 		<v-row justify="center">
-			<v-col cols="12" md="5" lg="4" sm="8" xl="3">
+			<v-col cols="12" md="5" lg="6" sm="8" xl="3">
 				<v-card>
 					<v-form ref="form" class="form">
 						<v-row>
 							<v-col md="5">
-								<v-btn
-									class="text-right"
-									color="grey darken-3"
-									:to="{ name: 'Login' }"
-									exact
-								>
+								<v-btn class="text-right" :to="{ name: 'Login' }" exact>
 									<v-icon>mdi-arrow-left-bold</v-icon>
 								</v-btn>
 							</v-col>
 							<v-col>
-								<div class="sign-up-header">Sign up</div>
+								<div class="sign-up-header">{{ t("signUp.signUpText") }}</div>
 							</v-col>
 						</v-row>
 
@@ -27,7 +22,7 @@
 								<v-text-field
 									v-model.trim="form.email"
 									required
-									label="Email"
+									:label="t('signUp.email')"
 									:disabled="registered"
 									:rules="[
 										(v) => !!v || 'Email must be filled',
@@ -44,7 +39,7 @@
 								<v-text-field
 									v-model.trim="form.firstname"
 									required
-									label="Firstname"
+									:label="t('signUp.firstname')"
 									:rules="[(v) => !!v || 'Name must be filled']"
 								/>
 							</v-col>
@@ -54,7 +49,7 @@
 								<v-text-field
 									v-model.trim="form.lastname"
 									required
-									label="Lastname"
+									:label="t('signUp.lastname')"
 									:rules="[(v) => !!v || 'Lastname must be filled']"
 								/>
 							</v-col>
@@ -66,7 +61,7 @@
 									required
 									:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
 									:type="showPassword ? 'text' : 'password'"
-									label="Password"
+									:label="t('signUp.password')"
 									:rules="[(v) => !!v || 'Password must be filled']"
 									@click:append="showPassword = !showPassword"
 								/>
@@ -77,7 +72,7 @@
 								<v-text-field
 									v-model="form.passwordAgain"
 									required
-									label="Password again"
+									:label="t('signUp.passwordAgain')"
 									:rules="[passwordFilled, passwordMatched]"
 									:append-icon="showPasswordAgain ? 'mdi-eye' : 'mdi-eye-off'"
 									:type="showPasswordAgain ? 'text' : 'password'"
@@ -93,7 +88,7 @@
 									class="white--text float-right"
 									@click="signUp"
 								>
-									SignUp
+									{{ t("signUp.signUp") }}
 								</v-btn>
 							</v-col>
 						</v-row>
@@ -110,12 +105,11 @@ import "firebase/auth";
 import { sync } from "vuex-pathify";
 import axios from "axios";
 import authMixin from "@/mixins/auth";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "SignUp",
-
-	mixins: [authMixin],
-
+	mixins: [authMixin, locale],
 	data: () => ({
 		form: {
 			firstname: "",
@@ -128,19 +122,16 @@ export default {
 		showPasswordAgain: false,
 		registered: false,
 	}),
-
 	computed: {
 		snackbar: sync("app/snackbar"),
 	},
-
-	created() {
+	async created() {
 		const user = this.getLoggedUser();
 		if (user) {
 			this.registered = true;
 			this.form.email = user.email;
 		}
 	},
-
 	methods: {
 		async signUp() {
 			if (this.validate()) {
@@ -186,14 +177,13 @@ export default {
 						.catch((e) => {
 							this.snackbar = {
 								open: true,
-								message: e.response?.message || "Something went wrong",
+								message: e.response?.message || this.t("error.default"),
 								type: "error",
 							};
 						});
 				}
 			}
 		},
-
 		prepareLastname(lastname) {
 			if (Array.isArray(lastname)) {
 				let preparedLastname = "";
@@ -208,17 +198,14 @@ export default {
 			}
 			return lastname;
 		},
-
 		validate() {
 			return this.$refs.form.validate();
 		},
-
 		passwordFilled(v) {
 			return !!v || "Password must be filled";
 		},
-
 		passwordMatched(v) {
-			return v === this.form.password || "Passwords does not match";
+			return v === this.form.password || this.t("signUp.passwordsNotMatch");
 		},
 	},
 };
@@ -226,7 +213,7 @@ export default {
 
 <style scoped>
 section {
-	margin-top: 10%;
+	margin-top: 5%;
 }
 
 .sign-up-header {

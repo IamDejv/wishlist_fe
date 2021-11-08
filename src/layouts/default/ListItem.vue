@@ -26,15 +26,17 @@
 		</v-list-item-icon>
 
 		<v-list-item-content v-if="item.title">
-			<v-list-item-title v-text="item.title" />
+			<v-list-item-title v-text="t(`menu.${item.title}`)" />
 		</v-list-item-content>
 	</v-list-item>
 </template>
 
 <script>
+import locale from "@/mixins/locale";
+
 export default {
 	name: "DefaultListItem",
-
+	mixins: [locale],
 	props: {
 		item: {
 			type: Object,

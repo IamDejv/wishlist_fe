@@ -14,22 +14,22 @@ const state = {
 	mini: false,
 	items: [
 		{
-			title: "Home",
+			title: "home",
 			icon: "mdi-view-dashboard",
 			to: "/",
 		},
 		{
-			title: "Friends",
+			title: "friends",
 			icon: "mdi-account-multiple",
 			to: "/friends",
 		},
 		{
-			title: "Groups",
+			title: "groups",
 			icon: "mdi-account-group",
 			to: "/groups",
 		},
 		{
-			title: "Wishlists",
+			title: "wishlists",
 			icon: "mdi-gift",
 			to: "/wishlists",
 		},

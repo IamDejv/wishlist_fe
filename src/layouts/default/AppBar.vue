@@ -16,22 +16,22 @@
 
 		<v-spacer />
 
-		<create-group-modal
-			v-if="$route.name === 'Groups' || $route.name === 'GroupDetail'"
-		></create-group-modal>
+		<group-modal v-if="$route.name === 'Groups' || $route.name === 'GroupDetail'"></group-modal>
 
-		<create-wishlist-modal
+		<wishlist-modal
 			v-if="$route.name === 'Wishlists' || $route.name === 'WishlistDetail'"
-		></create-wishlist-modal>
+		></wishlist-modal>
 
-		<add-product-modal
+		<product-modal
 			v-if="$route.name === 'WishlistDetail' || $route.name === 'Dashboard'"
 			class="ml-5"
-		></add-product-modal>
+		></product-modal>
 
 		<add-friend-modal v-if="$route.name === 'Friends'"></add-friend-modal>
 
 		<default-go-home />
+
+		<default-notifications />
 
 		<default-account />
 	</v-app-bar>
@@ -41,17 +41,17 @@
 // Utilities
 import { get, sync } from "vuex-pathify";
 import AddFriendModal from "@/components/AddFriendModal";
-import CreateGroupModal from "@/components/CreateGroupModal";
-import CreateWishlistModal from "@/components/CreateWishlistModal";
-import AddProductModal from "@/components/AddProductModal";
+import GroupModal from "@/components/GroupModal";
+import WishlistModal from "@/components/WishlistModal";
+import ProductModal from "@/components/ProductModal";
 
 export default {
 	name: "DefaultBar",
 
 	components: {
-		AddProductModal,
-		CreateWishlistModal,
-		CreateGroupModal,
+		ProductModal,
+		WishlistModal,
+		GroupModal,
 		AddFriendModal,
 		DefaultAccount: () =>
 			import(
@@ -62,6 +62,11 @@ export default {
 			import(
 				/* webpackChunkName: "default-go-home" */
 				"./widgets/GoHome"
+			),
+		DefaultNotifications: () =>
+			import(
+				/* webpackChunkName: "default-notifications" */
+				"./widgets/Notifications"
 			),
 	},
 

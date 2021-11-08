@@ -6,7 +6,7 @@
 
 		<v-card-actions>
 			<router-link :to="`wishlists/${wishlist.id}`" style="text-decoration: none">
-				<v-btn color="orange lighten-2" text> Detail </v-btn>
+				<v-btn color="primary lighten-2" text> Detail </v-btn>
 			</router-link>
 
 			<v-spacer></v-spacer>
@@ -22,9 +22,11 @@ import axios from "axios";
 import { EventBus, WISHLIST_SET_ACTIVE } from "@/utils/event-bus";
 import { sync } from "vuex-pathify";
 import CONST from "@/consts";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "WishlistCard",
+	mixins: [locale],
 	props: {
 		wishlist: Object,
 	},
@@ -69,7 +71,7 @@ export default {
 					if (e.response) {
 						this.snackbar = {
 							open: true,
-							message: e.response?.message || "Something went wrong",
+							message: e.response?.message || this.t("error.default"),
 							type: "error",
 						};
 					}

@@ -6,12 +6,9 @@
 
 		<v-card-actions>
 			<router-link :to="`groups/${group.id}`" style="text-decoration: none">
-				<v-btn color="orange lighten-2" text> Detail </v-btn>
+				<v-btn color="primary lighten-2" text> Detail </v-btn>
 			</router-link>
 			<v-spacer></v-spacer>
-			<v-btn :color="iconColour" icon @click="setActive">
-				<v-icon>{{ icon }}</v-icon>
-			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -47,6 +44,7 @@ export default {
 		};
 	},
 	methods: {
+		// TODO unused
 		setActive() {
 			const url = `me/groups/active`;
 			const body = {

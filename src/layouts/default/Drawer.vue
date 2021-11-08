@@ -21,7 +21,7 @@
 				<v-btn block class="text-none" @click="logout">
 					<v-icon left> mdi-exit-to-app </v-icon>
 
-					Logout
+					{{ t("menu.logout") }}
 				</v-btn>
 			</div>
 		</template>
@@ -33,10 +33,11 @@
 <script>
 // Utilities
 import { get, sync } from "vuex-pathify";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "DefaultDrawer",
-
+	mixins: [locale],
 	components: {
 		DefaultDrawerHeader: () =>
 			import(
@@ -49,16 +50,14 @@ export default {
 				"./List"
 			),
 	},
-
 	computed: {
 		...get("user", ["gradient", "image"]),
 		...get("app", ["items", "version", "darkMode"]),
 		...sync("app", ["drawer", "drawerImage", "mini"]),
 	},
-
 	methods: {
 		logout() {
-			this.$router.push("sign-out");
+			this.$router.push("/sign-out");
 		},
 	},
 };

@@ -20,6 +20,7 @@
 				</v-btn>
 
 				<v-img
+					ref="img"
 					:src="product.image"
 					min-height="250"
 					min-width="250"
@@ -44,7 +45,7 @@
 							<v-btn color="white" text> Detail </v-btn>
 						</router-link>
 						<a :href="product.url" style="text-decoration: none" target="_blank">
-							<v-btn color="white" text> To Store </v-btn>
+							<v-btn color="white" text> {{ t("toStore") }} </v-btn>
 						</a>
 					</v-overlay>
 				</v-fade-transition>
@@ -57,6 +58,7 @@
 import axios from "axios";
 import { sync } from "vuex-pathify";
 import { EDIT_PRODUCT, EventBus, PRODUCT_REMOVED } from "@/utils/event-bus";
+import locale from "@/mixins/locale";
 
 export default {
 	name: "ProductCard",
@@ -64,6 +66,7 @@ export default {
 		product: Object,
 		showButtons: Boolean,
 	},
+	mixins: [locale],
 	computed: {
 		snackbar: sync("app/snackbar"),
 	},
@@ -85,7 +88,7 @@ export default {
 					if (e.response) {
 						this.snackbar = {
 							open: true,
-							message: e.response?.message || "Something went wrong",
+							message: e.response?.message || this.t("error.default"),
 							type: "error",
 						};
 					}

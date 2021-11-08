@@ -4,17 +4,26 @@
 			<v-col cols="auto">
 				<h1 class="text-h1 mb-16 font-weight-bold">404</h1>
 
-				<div class="text-h4 pt-8 pb-10">Page not found :(</div>
+				<div class="text-h4 pt-8 pb-10">
+					{{ t("fourOhFour.text") }}
+				</div>
 
-				<v-btn depressed large to="/"> Get me out! </v-btn>
-				<v-btn class="ml-5" depressed large @click="$router.go(-1)"> Back </v-btn>
+				<v-btn depressed large to="/"> {{ t("fourOhFour.home") }} </v-btn>
+				<v-btn class="ml-5" depressed large @click="$router.go(-1)">
+					{{ t("fourOhFour.back") }}
+				</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
 </template>
 
 <script>
-export default { name: "Error" };
+import locale from "@/mixins/locale";
+
+export default {
+	name: "Error",
+	mixins: [locale],
+};
 </script>
 
 <style lang="sass">
