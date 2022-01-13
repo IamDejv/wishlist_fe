@@ -8,9 +8,17 @@ const translations = {
 		dataTable: {
 			itemsPerPageText: "Na stránku:",
 			pageText: "{0}-{1} av {2}",
+			ariaLabel: {
+				sortNone: "Žadné uspořádání",
+				activateAscending: "Vzestupně",
+				activateDescending: "Sestupně",
+			},
 		},
 		dataFooter: {
 			pageText: "{0}-{1} of {2}",
+			itemsPerPageAll: "Všechno",
+			prevPage: "Přechozí",
+			nextPage: "Další",
 		},
 		menu: {
 			home: "Domů",
@@ -111,7 +119,14 @@ const translations = {
 				secretSanta: "Tajný santa",
 			},
 		},
+		products: {
+			reserve: "Zarezervovat",
+			toShop: "Do Obchodu",
+		},
 		empty: "Prázdné",
+		noDataText: "Žádná data",
+		close: "Zavřít",
+		badge: "Odznak",
 	},
 };
 

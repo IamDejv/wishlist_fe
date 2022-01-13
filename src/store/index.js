@@ -11,12 +11,6 @@ const store = new Vuex.Store({
 	plugins: [pathify.plugin],
 });
 
-// store.subscribe((mutation) => {
-// 	if (!mutation.type.startsWith("user/")) return;
-//
-// 	store.dispatch("user/update", mutation);
-// });
-
 export default store;
 
 export const ROOT_DISPATCH = Object.freeze({ root: true });

@@ -32,6 +32,7 @@ const routes = [
 			route("WishlistDetail", null, "wishlists/:wishlistId"),
 			route("FriendWishlist", "WishlistDetail", "friends/:userId"),
 			route("Wishlists", null, "wishlists"),
+			route("ProductDetail", null, "products/:productId"),
 		],
 		"",
 		{},

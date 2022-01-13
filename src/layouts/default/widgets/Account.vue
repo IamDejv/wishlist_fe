@@ -7,9 +7,9 @@
 		</template>
 
 		<v-list :tile="false" flat nav>
-			<app-bar-item :to="{ name: 'UserProfile' }">
-				<v-list-item-title v-text="t('menu.profile')" />
-			</app-bar-item>
+			<!--<app-bar-item :to="{ name: 'UserProfile' }">-->
+			<!--<v-list-item-title v-text="t('menu.profile')" />-->
+			<!--</app-bar-item>-->
 
 			<app-bar-item to="/">
 				<v-list-item-title v-text="t('menu.darkMode')" />

@@ -7,10 +7,18 @@ const translations = {
 		},
 		dataTable: {
 			itemsPerPageText: "Items per page:",
-			pageText: "{0}-{1} of {2}",
+			pageText: "{0}-{1} av {2}",
+			ariaLabel: {
+				sortNone: "Sort None",
+				activateAscending: "Ascending",
+				activateDescending: "Descending",
+			},
 		},
 		dataFooter: {
 			pageText: "{0}-{1} of {2}",
+			itemsPerPageAll: "Items per page all",
+			prevPage: "Previous",
+			nextPage: "Next",
 		},
 		menu: {
 			home: "Home",
@@ -111,7 +119,14 @@ const translations = {
 				secretSanta: "Secret Santa",
 			},
 		},
+		products: {
+			reserve: "Reserve",
+			toShop: "To Shop",
+		},
 		empty: "Empty",
+		noDataText: "No Data",
+		close: "Close",
+		badge: "Badge",
 	},
 };
 

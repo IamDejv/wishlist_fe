@@ -21,9 +21,9 @@
 					<v-toolbar-title>{{ t("button.addProduct") }}</v-toolbar-title>
 					<v-spacer></v-spacer>
 					<v-toolbar-items>
-						<v-btn v-if="step === 2" dark text @click="submit">{{
-							t("form.save")
-						}}</v-btn>
+						<v-btn v-if="step === 2" dark text @click="submit">
+							{{ t("form.save") }}
+						</v-btn>
 					</v-toolbar-items>
 				</v-toolbar>
 				<v-stepper v-model="step" vertical elevation="0">
