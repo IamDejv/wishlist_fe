@@ -3,3 +3,4 @@
 import "./app";
 import "./dayjs";
 import "./axios";
+import "./vuetify-dialog";

@@ -104,6 +104,7 @@
 											icon="mdi-note-edit"
 											color="default"
 											:tooltip="t('groups.wishlist')"
+											@onClick="showFriendWishlist(user)"
 										></button-hover>
 										<button-hover
 											icon="mdi-minus"
@@ -138,6 +139,7 @@
 											icon="mdi-note-edit"
 											:tooltip="t('groups.wishlist')"
 											color="default"
+											@onClick="showFriendWishlist(user)"
 										></button-hover>
 										<button-hover
 											icon="mdi-plus"
@@ -238,6 +240,9 @@ export default {
 		}
 	},
 	methods: {
+		showFriendWishlist(friend) {
+			this.$router.push({ name: "FriendWishlist", params: { userId: friend.id } });
+		},
 		onImageSelect(image) {
 			this.form.image = image.path;
 			this.selectedImage = image.name;

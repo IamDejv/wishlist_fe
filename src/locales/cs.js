@@ -30,6 +30,17 @@ const translations = {
 			profile: "Profil",
 			language: "Jazyk",
 		},
+		group: {
+			archive: "Archivovat Skupinu",
+			archiveText: "Opravdu chcete archivovat tuto skupinu?",
+			name: "Název",
+			my: "Moje skupiny",
+		},
+		wishlist: {
+			archive: "Archivovat přání",
+			archiveText: "Opravdu chcete archivovat toto přání?",
+			my: "Moje přání",
+		},
 		error: {
 			default: "Něco se pokazilo",
 		},

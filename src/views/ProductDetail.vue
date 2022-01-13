@@ -21,8 +21,8 @@
 						</v-btn>
 					</v-col>
 					<v-col md="6">
-						<v-btn class="v-btn info v-btn--block">
-							<a :href="product.url" target="_blank">{{ t("products.toShop") }}</a>
+						<v-btn class="v-btn info v-btn--block" :href="product.url" target="_blank">
+							{{ t("products.toShop") }}
 						</v-btn>
 					</v-col>
 				</v-row>

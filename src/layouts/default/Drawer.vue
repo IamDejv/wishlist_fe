@@ -9,8 +9,6 @@
 		width="260"
 	>
 		<div class="px-2">
-			<default-drawer-header />
-
 			<v-divider class="mx-3 mb-2" />
 
 			<default-list :items="items" />
@@ -39,16 +37,11 @@ export default {
 	name: "DefaultDrawer",
 	mixins: [locale],
 	components: {
-		DefaultDrawerHeader: () =>
-			import(
-				/* webpackChunkName: "default-drawer-header" */
-				"./widgets/DrawerHeader"
-			),
 		DefaultList: () =>
 			import(
 				/* webpackChunkName: "default-list" */
 				"./List"
-			),
+		),
 	},
 	computed: {
 		...get("user", ["gradient", "image"]),

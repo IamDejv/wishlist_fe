@@ -58,6 +58,17 @@ const translations = {
 				image: "Image",
 			},
 		},
+		group: {
+			archive: "Archive Group",
+			archiveText: "Are you sure you want to archive this group?",
+			name: "Name",
+			my: "My Groups",
+		},
+		wishlist: {
+			archive: "Archive Wishlist",
+			archiveText: "Are you sure you want to archive this wishlist?",
+			my: "My Wishlists",
+		},
 		groups: {
 			wishlist: "Wishlist",
 			addToGroup: "Add to group",
@@ -80,9 +91,9 @@ const translations = {
 			friendAdded: "Friend added",
 		},
 		button: {
-			addProduct: "Product added",
-			addWishlist: "Wishlist added",
-			editWishlist: "Wishlist edited",
+			addProduct: "Add Product",
+			addWishlist: "Add Wishlist",
+			editWishlist: "Edit Wishlist",
 			addGroup: "Add Group",
 			editGroup: "Edit group",
 			addFriend: "Add friend",

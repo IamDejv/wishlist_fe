@@ -8825,6 +8825,11 @@ vue@^2.6.11, vue@^2.6.12:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
+vuetify-dialog@^2.0.14:
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/vuetify-dialog/-/vuetify-dialog-2.0.17.tgz#be198c1879329a73d78917080ea597d01692773d"
+  integrity sha512-MKrSx2kXNXdQK5zzjNodoCfuT315HJFyEnon+KzHMu9BLOFZ4R+iEbwsE5UL2uEnfOI116jUEuoU2/y6a3KxHw==
+
 vuetify@^2.4.0:
   version "2.5.10"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.5.10.tgz#165cb3de9dbffbc94bc775aa2f698eb9fa89eabe"
